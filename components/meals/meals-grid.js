@@ -1,4 +1,3 @@
-import Link from "next/link";
 import MealItem from "./meal-item";
 import classes from "./meals-grid.module.css";
 
