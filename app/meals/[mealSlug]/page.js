@@ -3,16 +3,32 @@ import { getMealBySlug } from "@/lib/meals";
 import { notFound } from "next/navigation";
 import classes from "./page.module.css";
 
+export async function generateMetadata({ params }) {
+  const meal = getMealBySlug(params.mealSlug);
+
+	if (!meal) {
+		return {
+			title: "Meal Not Found",
+			description: "The requested meal could not be found.",
+		};
+	}
+
+  return {
+    title: meal.title,
+    description: meal.summary,
+  };
+}
+
 export default function MealDetailPage({ params }) {
   const meal = getMealBySlug(params.mealSlug);
 
   if (!meal) {
-   notFound(); // If no meal is found, trigger a 404 page
+    notFound(); // If no meal is found, trigger a 404 page
   }
 
   // Replace newlines in instructions with <br /> tags for HTML rendering
 
-  meal.instructions = meal.instructions.replace(/\n/g, '<br />'); 
+  meal.instructions = meal.instructions.replace(/\n/g, "<br />");
 
   return (
     <>
@@ -29,7 +45,10 @@ export default function MealDetailPage({ params }) {
         </div>
       </header>
       <main>
-        <p className={classes.instructions} dangerouslySetInnerHTML={{ __html: meal.instructions }}></p>
+        <p
+          className={classes.instructions}
+          dangerouslySetInnerHTML={{ __html: meal.instructions }}
+        ></p>
       </main>
     </>
   );
